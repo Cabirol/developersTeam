@@ -1,3 +1,7 @@
 [{
-  "alvaro":"HELLO"
+  "nomTasca": "cocinar",
+  "usuari": "alvaro",
+  "estat": "pendent",
+  "horaInici": "",
+  "horaFinal": ""
 }]
