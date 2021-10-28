@@ -2,6 +2,16 @@
   "id_generator": [
     "task",
     "task",
+    "task",
+    "task",
+    "task",
+    "task",
+    "task",
+    "task",
+    "task",
+    "task",
+    "task",
+    "task",
     "task"
   ],
   "db": [
@@ -13,13 +23,100 @@
       "horaFinal": ""
     },
     {
-      "task": "newtask"
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 0
     },
     {
-      "task": "newtask"
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 1
     },
     {
-      "task": "newtask"
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 2
+    },
+    {
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 3
+    },
+    {
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 4
+    },
+    {
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "acabada",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 5
+    },
+    {
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 6
+    },
+    {
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 7
+    },
+    {
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 8
+    },
+    {
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 9
+    },
+    {
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 11
+    },
+    {
+      "nomTasca": "limpiar",
+      "usuari": "alvar",
+      "estat": "sinhacer",
+      "dataInici": "hoy",
+      "dataFinal": "mañana",
+      "Id": 12
     }
   ]
 }

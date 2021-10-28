@@ -1,6 +1,12 @@
 const dbJson = require('./persistencia.json')
 const inquirer = require('inquirer')
-
+const {
+  createTask,
+  listTasks,
+  listOne,
+  updateTaskState,
+  deleteTask
+} = require('./controllersJson')
 
 const choicesDB = {
   "mongoDB": ()=> console.log('mongodb'),
