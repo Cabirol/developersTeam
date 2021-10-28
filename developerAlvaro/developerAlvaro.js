@@ -19,25 +19,27 @@ const choicesJson={
 const jsonMenu = () => {
   inquirer.prompt({
     type:'list',
-    name:'input',
+    name:'answer',
     message:`\nelige una opcion:\n\n`,
     choices:Object.keys(choicesJson)
   })
+    .then(({answer}) =>{
+      choicesJson[answer]()
+    })
 }
 
 
-
-function menuInit(){
+const menuInit = () => {
 
 inquirer.prompt({
   type:'list',
-  name:'input',
+  name:'answer',
   message:`\nelige un metodo de persistencia de datos?\n\n`,
   choices: Object.keys(choicesDB)
 })
-  .then( ({input}) =>{
-    choicesDB[input]()
-    }
+  .then( ({answer}) =>{
+    choicesDB[answer]()
+  }
   )
 }
 

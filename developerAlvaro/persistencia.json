@@ -1,7 +1,25 @@
-[{
-  "nomTasca": "cocinar",
-  "usuari": "alvaro",
-  "estat": "pendent",
-  "horaInici": "",
-  "horaFinal": ""
-}]
+{
+  "id_generator": [
+    "task",
+    "task",
+    "task"
+  ],
+  "db": [
+    {
+      "nomTasca": "cocinar",
+      "usuari": "alvaro",
+      "estat": "pendent",
+      "horaInici": "",
+      "horaFinal": ""
+    },
+    {
+      "task": "newtask"
+    },
+    {
+      "task": "newtask"
+    },
+    {
+      "task": "newtask"
+    }
+  ]
+}
