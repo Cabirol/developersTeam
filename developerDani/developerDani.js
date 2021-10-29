@@ -13,7 +13,7 @@ const taskSchema = new mongoose.Schema({
 
 const Task = mongoose.model('Task', taskSchema);
 
-const CrearNovaTasca = () => {
+const crearNovaTasca = () => {
     let preguntesNovaTasca = [
         {
             type: 'input',
@@ -41,4 +41,12 @@ const CrearNovaTasca = () => {
         console.log(novaTasca);
         novaTasca.save();
       });
+}
+
+const mostrarTasques = () => {
+    let query = Task.find();
+    query.exec(function(err,task){
+        if(err) return handleError(err);
+        console.log(task.map(x => x.nom));
+    });
 }
