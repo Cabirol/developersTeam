@@ -14,6 +14,7 @@ const taskSchema = new mongoose.Schema({
 const Task = mongoose.model('Task', taskSchema);
 
 const crearNovaTasca = () => {
+
     let preguntesNovaTasca = [
         {
             type: 'input',
@@ -29,7 +30,7 @@ const crearNovaTasca = () => {
         }
     ];
 
-    inquirer.prompt(preguntesNovaTasca).then((answers) => {
+    inquirer.prompt(preguntesNovaTasca).then(answers => {
         let novaTasca = new Task({
             nom: answers.nomNovaTasca,
             usuari: answers.nomUsuari,
@@ -40,13 +41,28 @@ const crearNovaTasca = () => {
         console.log('\nCreada una nova Tasca:');
         console.log(novaTasca);
         novaTasca.save();
-      });
+    });
+
 }
 
-const mostrarTasques = () => {
-    let query = Task.find();
-    query.exec(function(err,task){
-        if(err) return handleError(err);
-        console.log(task.map(x => x.nom));
-    });
+async function mostrarTasques() {
+
+    let nomTasques = await Task.find();
+    nomTasques = nomTasques.map(x => x.nom);
+    console.log(nomTasques);
+    //Possibilitat de preguntar si l'usuari vol veure alguna tasca amb més detall i cridar llistarTasca()
+}
+
+async function llistarTasca() {
+
+    let nomTasques = await Task.find();
+    nomTasques = nomTasques.map(x => x.nom);
+    inquirer.prompt({
+        type: 'list',
+        name: 'llistaTasca',
+        message: 'Quina tasca vols veure amb detall?',
+        choices: nomTasques
+    })
+    .then(answer => Task.findOne({nom:answer.llistaTasca},{_id:0, __v:0}))
+    .then(tasca => console.log(tasca));
 }
