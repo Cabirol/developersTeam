@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "inquirer": "^8.2.0",
-    "mongoose": "^6.0.12"
+    "mongoose": "^6.0.12",
+    "mysql2": "^2.3.2",
+    "sequelize": "^6.9.0"
   }
 }
