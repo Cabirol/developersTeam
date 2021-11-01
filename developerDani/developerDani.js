@@ -63,6 +63,20 @@ async function llistarTasca() {
         message: 'Quina tasca vols veure amb detall?',
         choices: nomTasques
     })
+    .then(answer => Task.findOne({nom:answer.llistaTasca},{_id:0, __v:0}))//modificar, buscar per l'id de nomtasques enlloc de per nom
+    .then(tasca => console.log(tasca));
+}
+
+async function esborrarTasca() {
+
+    let nomTasques = await Task.find();
+    nomTasques = nomTasques.map(x => x.nom);
+    inquirer.prompt({
+        type: 'list',
+        name: 'llistaTasca',
+        message: 'Quina tasca vols esborrar?',
+        choices: nomTasques
+    })
     .then(answer => Task.findOne({nom:answer.llistaTasca},{_id:0, __v:0}))
     .then(tasca => console.log(tasca));
 }
