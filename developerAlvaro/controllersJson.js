@@ -2,10 +2,10 @@ const {id_generator, db} = require('./persistencia.json')
 const fs = require('fs')
 
 
-function Task (nomTasca, usuari, estat, dataInici, dataFinal){
+function Task (nomTasca, usuari, dataInici, dataFinal){
   this.nomTasca = nomTasca,
   this.usuari = usuari,
-  this.estat = estat,
+  this.estat = 'pendiente',
   this.dataInici = dataInici,
   this.dataFinal = dataFinal
   this.Id = id_generator.length
@@ -14,19 +14,18 @@ function Task (nomTasca, usuari, estat, dataInici, dataFinal){
 
 const save = (newData)=>{
   const formatedData = JSON.stringify(newData)
-  fs.writeFile('./persistencia.json', formatedData, err => {
+  fs.writeFile(`${__dirname}/persistencia.json`, formatedData, err => {
     if(err) throw err;
   })
   return true
 }
 
-const createTask = (task) => {
+const createTask = ({nomTasca, usuari, dataInici, dataFinal}) => {
   const newTask =  new Task(
-    task.nomTasca, 
-    task.usuari, 
-    task.estat, 
-    task.dataInici, 
-    task.dataFinal
+    nomTasca, 
+    usuari, 
+    dataInici, 
+    dataFinal
     )
   id_generator.push('task')
   db.push(newTask)
@@ -45,12 +44,12 @@ const listTasks = () => {
   console.table(db)
 }
 
-const listOne = (id) =>{
+const listOne = ({id}) =>{
   const task = db.find(task => task.Id == id)
   console.table(task)
 }
 
-const updateTaskState = (id,newState) =>{
+const updateTaskState = ({id,newState}) =>{
   
   db.forEach(task => {
     if(task.Id==id){
@@ -64,11 +63,14 @@ const updateTaskState = (id,newState) =>{
   const success = save(allDB)
   if(success){
     console.log('Task updated')
+    console.log(id)
+    listOne({id})
   }
 }
 // updateTaskState(5,'acabada')
 
-const deleteTask = (id) =>{
+const deleteTask = ({id}) =>{
+  console.log(id)
   const newDB = db.filter(task => task.Id != id)
   const allDB = {
     id_generator:id_generator,
