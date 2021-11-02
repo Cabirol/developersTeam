@@ -23,36 +23,38 @@ async function findOne(id){
         console.log('Buscando tarea...');
         const tarea = await Tarea.findByPk(id);
         if(tarea){
-            console.log(tarea);
+            console.log('Tarea encontrada: ', tarea);
         } else {
             console.log('Tarea no existe');
         }  
     }catch(err){ console.log(err)}  
 }
+
 async function upDat(tarea){
     try{
         console.log('Buscando tarea...', tarea);
         const tareaId  = await Tarea.findByPk(tarea.id);
+        
         if(tareaId){
+            await Tarea.update({estado: tarea.estado},{where:{id: tarea.id }})
             console.log('Tarea actualizada');
-        } else {
+            } else {
             console.log('Tarea no existe');
-        }    
+       }
+       
     }catch(err){ console.log(err)}
 }
-
 
 async function delet(id){
     try{
         const tarea  = await Tarea.findByPk(id);
-        if(tarea.id){
-            await Tarea.update(tarea)
-            console.log('Tarea actualizada');
+        if(tarea){
+            await Tarea.destroy({ where: { id: id}})
+            console.log('Tarea eliminada');
         } else {
             console.log('Tarea no existe');
         }    
-    }catch(err){ console.log(err)}
-    console.log('Buscando tarea...');
+    }catch(err){ console.log(err)}    
 }
 
 module.exports = { findAll, findOne, creat, delet, upDat }
