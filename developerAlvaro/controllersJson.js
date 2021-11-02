@@ -1,4 +1,4 @@
-const {id_generator, db} = require('./persistencia.json')
+let {id_generator, db} = require('./persistencia.json')
 const fs = require('fs')
 
 
@@ -12,9 +12,9 @@ function Task (nomTasca, usuari, dataInici, dataFinal){
 }
 
 
-const save = (newData)=>{
+const save = async (newData)=>{
   const formatedData = JSON.stringify(newData)
-  fs.writeFile(`${__dirname}/persistencia.json`, formatedData, err => {
+  await fs.writeFile(`${__dirname}/persistencia.json`, formatedData, err => {
     if(err) throw err;
   })
   return true
@@ -63,15 +63,14 @@ const updateTaskState = ({id,newState}) =>{
   const success = save(allDB)
   if(success){
     console.log('Task updated')
-    console.log(id)
     listOne({id})
   }
 }
 // updateTaskState(5,'acabada')
 
 const deleteTask = ({id}) =>{
-  console.log(id)
   const newDB = db.filter(task => task.Id != id)
+  db = newDB
   const allDB = {
     id_generator:id_generator,
     db:newDB
@@ -79,8 +78,14 @@ const deleteTask = ({id}) =>{
   const success = save(allDB)
   if(success){
     console.log('Task deleted')
+    console.table(db)
   }
 }
+
+
+
+/* createTask({nomTasca:'olaaa',usuari:'alvarooo',dataInici:'haaay',dataFinal:'tumorrou'})
+console.log(console.table(db)) */
 
 
 module.exports = {

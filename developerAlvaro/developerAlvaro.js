@@ -1,4 +1,3 @@
-const dbJson = require('./persistencia.json')
 const inquirer = require('inquirer')
 const {
   createTask,
