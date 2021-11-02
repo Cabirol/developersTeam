@@ -22,6 +22,9 @@ const choicesJson={
   "volver al menu principal": ()=>menuInit()
 }
 
+
+
+
 const jsonMenu = () => {
   inquirer.prompt({
     type:'list',
