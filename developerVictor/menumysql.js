@@ -12,6 +12,7 @@ const choicesJson = {
 }
 
 const mysqlMenu = () => {
+  
   inquirer.prompt({
     type: 'list',
     name: 'answer',
@@ -38,13 +39,21 @@ const questions = [
     message: 'Ingrese el estado',
     default: 'pendiente'
   },
+  {
+    name: 'dataInici',
+    message: 'Fecha de inicio',
+    default: new Date()
+  },
+  {
+    name: 'dataFinal',
+    message: 'Fecha finalizacion',
+    default: new Date()    
+  },
 ]
 
 const inpuTarea = async () => {
-
   const tarea = await inquirer.prompt(questions);
   console.log(tarea);
-
   await Tareas.creat(tarea);
 }
 
@@ -55,7 +64,6 @@ const question = [
   }
 ]
 const idTarea = async () => {
-
   const { id } = await inquirer.prompt(question);
   console.log(id);
   await Tareas.findOne(id);

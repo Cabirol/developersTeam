@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const sequelize = require('../bd/dbc');
+const sequelize = require('../bd/creadb');
 
 const Tarea = sequelize.define('Tarea', {
         id: {
@@ -8,10 +8,20 @@ const Tarea = sequelize.define('Tarea', {
             primaryKey: true,
             autoIncrement: true
         },
-        tarea: Sequelize.STRING,
-        usuario: Sequelize.STRING,
-        estado: Sequelize.STRING,       
-    })
+        tarea: {
+            type: Sequelize.STRING,
+            //allowNull: false,
+        }, 
+        usuario: {
+            type: Sequelize.STRING, 
+            //allowNull: false
+        }, 
+        estado: Sequelize.STRING,  
+        dataInici: Sequelize.DATE,   
+        dataFinal: Sequelize.DATE  
+    }, {
+        timestamps: false,
+      })
 
 
 module.exports = Tarea;

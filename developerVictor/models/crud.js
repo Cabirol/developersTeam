@@ -4,7 +4,7 @@ const Tarea = require('./tarea');
 
 async function creat(tarea){
     try{
-        console.log('Crear tarea...');
+        console.log('Crear tarea...', tarea);
         await Tarea.create(tarea);
         console.log('Tarea creada'); 
     }catch(err){ console.log(err)}    
@@ -14,7 +14,14 @@ async function findAll(){
     try{
         console.log('Buscando tareas...');
         const tareas = await Tarea.findAll();
-        console.log('Listado de  tareas: ', tareas);
+        if(tareas.length == 0){            
+            console.log('No hay tareas');
+        } else{
+            tareas.forEach(tarea => {
+                console.table(tarea.toJSON());            
+            });
+        }
+
     }catch(err){ console.log(err)}
 }
 
@@ -23,9 +30,9 @@ async function findOne(id){
         console.log('Buscando tarea...');
         const tarea = await Tarea.findByPk(id);
         if(tarea){
-            console.log('Tarea encontrada: ', tarea);
+           console.table(tarea.toJSON());
         } else {
-            console.log('Tarea no existe');
+            console.log('Tarea no encontrada');
         }  
     }catch(err){ console.log(err)}  
 }
@@ -33,12 +40,11 @@ async function findOne(id){
 async function upDat(tarea){
     try{
         console.log('Buscando tarea...', tarea);
-        const tareaId  = await Tarea.findByPk(tarea.id);
-        
+        const tareaId  = await Tarea.findByPk(tarea.id);  
         if(tareaId){
             await Tarea.update({estado: tarea.estado},{where:{id: tarea.id }})
             console.log('Tarea actualizada');
-            } else {
+        } else {
             console.log('Tarea no existe');
        }
        
