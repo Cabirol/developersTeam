@@ -12,6 +12,7 @@ const choicesJson = {
 }
 
 const mysqlMenu = () => {
+  
   inquirer.prompt({
     type: 'list',
     name: 'answer',
@@ -38,17 +39,21 @@ const questions = [
     message: 'Ingrese el estado',
     default: 'pendiente'
   },
+  {
+    name: 'dataInici',
+    message: 'Fecha de inicio',
+    default: new Date()
+  },
+  {
+    name: 'dataFinal',
+    message: 'Fecha finalizacion',
+    default: new Date()    
+  },
 ]
 
 const inpuTarea = async () => {
-  //console.clear();
-  console.log('==========================');
-  console.log('  Crear Tarea  ');
-  console.log('==========================\n');
-
   const tarea = await inquirer.prompt(questions);
   console.log(tarea);
-
   await Tareas.creat(tarea);
 }
 
@@ -59,11 +64,6 @@ const question = [
   }
 ]
 const idTarea = async () => {
-  //console.clear();
-  console.log('==========================');
-  console.log('  Listar una Tarea  ');
-  console.log('==========================\n');
-
   const { id } = await inquirer.prompt(question);
   console.log(id);
   await Tareas.findOne(id);
@@ -81,18 +81,12 @@ const question1 = [
   }
 ]
 const idUpdate = async () => {
-  console.log('==========================');
-  console.log('  Actualizar una Tarea  ');
-  console.log('==========================\n');
 
   const tarea  = await inquirer.prompt(question1);
   await Tareas.upDat(tarea);
 }
 
 const idDelete = async () => {
-  console.log('==========================');
-  console.log('  Eliminar una Tarea  ');
-  console.log('==========================\n');
 
   const { id } = await inquirer.prompt(question);
   console.log(id);
@@ -102,5 +96,5 @@ const idDelete = async () => {
 
 
 module.exports = mysqlMenu
-
+// mysqlMenu();
 

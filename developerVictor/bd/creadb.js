@@ -1,30 +1,28 @@
 const mysql = require('mysql2');
-const sequelize = require('./dbc');
+const Sequelize = require('sequelize');
 
-const conexion = mysql.createConnection({
-    host: 'localhost',
-    user: 'user',
-    password: '1234'
-});
+//const sequelize = require('./dbc');
+const config = require('../config.json');
 
-conexion.connect(error => {
-    if (error) throw error;
-    console.log('Conexion Ok...');
-});
-conexion.query('CREATE DATABASE IF NOT EXISTS dbmysql', (error) => {
-    if (error) throw error;
-    console.log('Dase de datos ok..');
-});
+const { host, user, password, database } = config.database;
+const sequelize = new Sequelize(database, user, password, { dialect: 'mysql' });
 
-sequelize.sync()
-    .then(() => {
-        console.log('Tablas ok...');
-    })
-    .catch(err => {
-        console.log('error', err);
-    })
-conexion.end();
+async function ini(){
+    
+    const conexion = await mysql.createConnection({ host, user, password });
+    conexion.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`, function(err, result) {
+        if(err) throw err;
+        sequelize.sync()
+        .then(console.log('\n Bd sincronizada'))
+        .catch(function(err){ console.log(err)})
+    })  
+    conexion.end();       
+    
+}
 
+ini();
+
+module.exports = sequelize
 
 
 
