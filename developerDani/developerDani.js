@@ -27,17 +27,17 @@ const choicesMongo = {
     "volver al menu principal": ()=>menuInit()*/
 }
 
-const mongoMenu = () => {
+function mongoMenu() {
     inquirer.prompt({
-      type:'list',
-      name:'answer',
-      message:`\nelige una opcion:\n\n`,
-      choices:Object.keys(choicesMongo)
+        type: 'list',
+        name: 'answer',
+        message: `\nEscull una opció:\n\n`,
+        choices: Object.keys(choicesMongo)
     })
-      .then(({answer}) =>{
-        choicesMongo[answer]()
-      })
-  }
+        .then(({answer}) => {
+            choicesMongo[answer]();
+        });
+}
 
 async function crearNovaTasca() {
 
@@ -88,44 +88,27 @@ async function mostrarTasques() {
 
 async function llistarTasca() {
 
-    let tasques = await Task.find();
-    tasques = tasques.map(x => x.toObject());
-    //console.log(tasques[0]._id);
-    let tasquesNomId = tasques.map(function(x){
-        let _tasquesNomId = {};
-        _tasquesNomId[x.nom] = x._id;
-        return _tasquesNomId;
-    });
-    console.log(tasquesNomId);
+    let nomTasques = await Task.find();
+    nomTasques = nomTasques.map(x => x.nom);
     inquirer.prompt({
         type: 'list',
-        name: 'llistaTasca',
+        name: 'escullTasca',
         message: 'Quina tasca vols veure amb detall?',
-        choices: tasquesNomId
+        choices: nomTasques
     })
-    .then(answer => Task.findOne({nom:answer.llistaTasca},{_id:0, __v:0}))
-    .then(tasca => console.log(tasca));
+        .then(answer => Task.findOne({nom:answer.escullTasca},{_id:0, __v:0}))
+        .then(tasca => console.log(tasca));
 
-    
 }
-
-const listOneMenu = () => {
-    inquirer
-      .prompt({
-        type:'input',
-        name:'id',
-        message:`\nintroduce la id de la tarea:\n`
-      })
-      .then(answer=> listOne(answer))
-      .then(()=>whatNow())
-      
-      /* .then(answer => console.log(answer)) */
-  }
 
 async function esborrarTasca() {
     //si no hi ha tasques avisar d'això
     let nomTasques = await Task.find();
     nomTasques = nomTasques.map(x => x.nom);
+    if (nomTasques.lenght == 0){
+        console.log('No hi ha tasques');
+
+    }
     let preguntesEsborrar = [
         {
             type: 'list',
