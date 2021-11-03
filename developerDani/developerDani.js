@@ -7,8 +7,8 @@ const taskSchema = new mongoose.Schema({
     nom: String,
     usuari: String,
     estat: String,
-    dataInici: String, //canviar després
-    dataFinal: String  //canviar després
+    dataInici: String, //format data!!!
+    dataFinal: String  
 });
 
 const Task = mongoose.model('Task', taskSchema);
@@ -44,16 +44,24 @@ async function crearNovaTasca() {
     let preguntesNovaTasca = [
         {
             type: 'input',
-            name: 'nomNovaTasca',
-            message: 'Escriu el nom de la nova tasca',
-            default: null
+            name: 'nomUsuari',
+            message: "\nEscriu el nom d'usuari de la tasca\n",
         },
         {
             type: 'input',
-            name: 'nomUsuari',
-            message: 'Escriu el nom de usuari de la tasca',
-            default: null
-        }
+            name: 'nomNovaTasca',
+            message: '\nEscriu el nom de la nova tasca\n',
+        },
+        {
+            type: 'input',
+            name: 'dataInici',
+            message: `\nEscriu la data d'inici de la tasca\n`
+          },
+          {
+            type: 'input',
+            name: 'dataFinal',
+            message: `\nEscriu la data de finalització de la tasca\n`
+          }
     ];
 
     inquirer.prompt(preguntesNovaTasca).then(answers => {
@@ -61,8 +69,8 @@ async function crearNovaTasca() {
             nom: answers.nomNovaTasca,
             usuari: answers.nomUsuari,
             estat: 'pendent',
-            dataInici: 'dataInici',
-            dataFinal: 'dataFinal' //canviar després
+            dataInici: answers.dataInici,
+            dataFinal: answers.dataFinal
         });
         console.log('\nCreada una nova Tasca:');
         console.log(novaTasca);
@@ -73,25 +81,46 @@ async function crearNovaTasca() {
 
 async function mostrarTasques() {
 
-    let nomTasques = await Task.find();
-    nomTasques = nomTasques.map(x => x.nom);
-    console.log(nomTasques);
-    
+    let tasques = await Task.find();
+    tasques = tasques.map(x => x.toObject());
+    console.table(tasques);
 }
 
 async function llistarTasca() {
 
-    let nomTasques = await Task.find();
-    nomTasques = nomTasques.map(x => x.nom);
+    let tasques = await Task.find();
+    tasques = tasques.map(x => x.toObject());
+    //console.log(tasques[0]._id);
+    let tasquesNomId = tasques.map(function(x){
+        let _tasquesNomId = {};
+        _tasquesNomId[x.nom] = x._id;
+        return _tasquesNomId;
+    });
+    console.log(tasquesNomId);
     inquirer.prompt({
         type: 'list',
         name: 'llistaTasca',
         message: 'Quina tasca vols veure amb detall?',
-        choices: nomTasques
+        choices: tasquesNomId
     })
     .then(answer => Task.findOne({nom:answer.llistaTasca},{_id:0, __v:0}))
     .then(tasca => console.log(tasca));
+
+    
 }
+
+const listOneMenu = () => {
+    inquirer
+      .prompt({
+        type:'input',
+        name:'id',
+        message:`\nintroduce la id de la tarea:\n`
+      })
+      .then(answer=> listOne(answer))
+      .then(()=>whatNow())
+      
+      /* .then(answer => console.log(answer)) */
+  }
 
 async function esborrarTasca() {
     //si no hi ha tasques avisar d'això
