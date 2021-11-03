@@ -35,9 +35,10 @@ const questions = [
     message: 'Ingrese usuario',
   },
   {
+    type: 'list',
     name: 'estado',
-    message: 'Ingrese el estado',
-    default: 'pendiente'
+    message: 'Estado de la tarea?',
+    choices: ['pendiente', 'ejecucion', 'finalizada'],
   },
   {
     name: 'dataInici',
@@ -75,25 +76,23 @@ const question1 = [
     message: 'Ingrese Id tarea'
   },
   {
+    type: 'list',
     name: 'estado',
-    message: 'Ingrese el estado',
-    default: 'pendiente'
-  }
+    message: 'Estado de la tarea?',
+    choices: ['pendiente', 'ejecucion', 'finalizada'],
+  },
 ]
-const idUpdate = async () => {
 
+const idUpdate = async () => {
   const tarea  = await inquirer.prompt(question1);
   await Tareas.upDat(tarea);
 }
 
 const idDelete = async () => {
-
   const { id } = await inquirer.prompt(question);
   console.log(id);
   await Tareas.delet(id);
 }
-
-
 
 module.exports = mysqlMenu
 // mysqlMenu();
