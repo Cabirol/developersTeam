@@ -30,11 +30,7 @@ async function findOne(id){
         console.log('Buscando tarea...');
         const tarea = await Tarea.findByPk(id);
         if(tarea){
-<<<<<<< HEAD
            console.table(tarea.toJSON());
-=======
-            console.log('Tarea encontrada: ', tarea);
->>>>>>> 89d7db252583e1dbd320fa413bf7d86c74548e48
         } else {
             console.log('Tarea no encontrada');
         }  
@@ -44,12 +40,7 @@ async function findOne(id){
 async function upDat(tarea){
     try{
         console.log('Buscando tarea...', tarea);
-<<<<<<< HEAD
         const tareaId  = await Tarea.findByPk(tarea.id);  
-=======
-        const tareaId  = await Tarea.findByPk(tarea.id);
-        
->>>>>>> 89d7db252583e1dbd320fa413bf7d86c74548e48
         if(tareaId){
             await Tarea.update({estado: tarea.estado},{where:{id: tarea.id }})
             console.log('Tarea actualizada');

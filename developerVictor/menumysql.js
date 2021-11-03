@@ -52,10 +52,6 @@ const questions = [
 ]
 
 const inpuTarea = async () => {
-<<<<<<< HEAD
-=======
-
->>>>>>> 89d7db252583e1dbd320fa413bf7d86c74548e48
   const tarea = await inquirer.prompt(questions);
   console.log(tarea);
   await Tareas.creat(tarea);
@@ -68,10 +64,6 @@ const question = [
   }
 ]
 const idTarea = async () => {
-<<<<<<< HEAD
-=======
-
->>>>>>> 89d7db252583e1dbd320fa413bf7d86c74548e48
   const { id } = await inquirer.prompt(question);
   console.log(id);
   await Tareas.findOne(id);
