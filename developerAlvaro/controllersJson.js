@@ -21,6 +21,8 @@ const save = async (newData)=>{
 }
 
 const createTask = ({nomTasca, usuari, dataInici, dataFinal}) => {
+
+
   const newTask =  new Task(
     nomTasca, 
     usuari, 
@@ -38,7 +40,6 @@ const createTask = ({nomTasca, usuari, dataInici, dataFinal}) => {
     console.log('New task added')
   }
 }
-// createTask({nomTasca:'limpiar', usuari:'alvar', estat:'sinhacer', dataInici:'hoy', dataFinal:'mañana'})
 
 const listTasks = () => {
   console.table(db)
@@ -50,7 +51,6 @@ const listOne = ({id}) =>{
 }
 
 const updateTaskState = ({id,newState}) =>{
-  
   db.forEach(task => {
     if(task.Id==id){
       task.estat = newState
@@ -66,11 +66,10 @@ const updateTaskState = ({id,newState}) =>{
     listOne({id})
   }
 }
-// updateTaskState(5,'acabada')
 
 const deleteTask = ({id}) =>{
   const newDB = db.filter(task => task.Id != id)
-  db = newDB
+  db = [...newDB]
   const allDB = {
     id_generator:id_generator,
     db:newDB
@@ -84,8 +83,7 @@ const deleteTask = ({id}) =>{
 
 
 
-/* createTask({nomTasca:'olaaa',usuari:'alvarooo',dataInici:'haaay',dataFinal:'tumorrou'})
-console.log(console.table(db)) */
+
 
 
 module.exports = {

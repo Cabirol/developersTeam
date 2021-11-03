@@ -1,3 +1,5 @@
+const initDB = require('./initDB')
+
 const inquirer = require('inquirer')
 const {
   createTask,
@@ -6,6 +8,7 @@ const {
   updateTaskState,
   deleteTask
 } = require('./controllersJson')
+
 
 const choicesDB = {
   "mongoDB": ()=> console.log('mongodb'),
@@ -146,6 +149,5 @@ inquirer.prompt({
   }
   )
 }
-
 
 menuInit()
