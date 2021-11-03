@@ -1,22 +1,25 @@
 const inquirer = require('inquirer');
+const sequelize = require('./bd/creadb');
 
 const Tareas = require('./models/crud');
+inquirer.registerPrompt("date", require("inquirer-date-prompt"));
 
 const choicesJson = {
-  "crear una nueva tarea": () => inpuTarea(),
-  "listar todas las tareas": () => Tareas.findAll(),
-  "listar una tarea": () => idTarea(),
-  "actualizar una tarea": () => idUpdate(),
-  "eliminar una tarea": () => idDelete(),
-  "volver al menu principal": () => console.log('Volver menu principal')
+  "crear una nueva tarea": () => inTarea(),
+  "listar todas las tareas": () => findTareas(),
+  "listar una tarea": () => findTarea(),
+  "actualizar una tarea": () => updateTarea(),
+  "eliminar una tarea": () => deleteTarea(),
+  "volver al menu principal": () => whatNow()
 }
 
+/****************************** */
 const mysqlMenu = () => {
-  
+  console.clear();
   inquirer.prompt({
     type: 'list',
     name: 'answer',
-    message: `\nelige una opcion:\n\n`,
+    message: `\n elige una opcion:\n\n`,
     choices: Object.keys(choicesJson)
   })
     .then(({ answer }) => {
@@ -24,8 +27,28 @@ const mysqlMenu = () => {
     })
 }
 
+/****************************** */
+const whatNow = () => {
+  inquirer
+    .prompt({
+      type:'list',
+      name:'response',
+      message: `\n que desea hacer? \n`,
+      choices: ['volver al menu','salir']
+    })
+    .then(({response})=>{
+      console.clear()
+      if( (response) === 'volver al menu'){
+        mysqlMenu()
+      }
+      if( (response) === 'salir'){
+        sequelize.close();
+      }
+    })
+}
 
-const questions = [
+
+const questionsInTask = [
   {
     name: 'tarea',
     message: 'Ingrese tarea'
@@ -39,38 +62,50 @@ const questions = [
     name: 'estado',
     message: 'Estado de la tarea?',
     choices: ['pendiente', 'ejecucion', 'finalizada'],
+    dafault: 'pendiente'
   },
   {
+    type: 'date',
     name: 'dataInici',
     message: 'Fecha de inicio',
-    default: new Date()
   },
   {
+    
+    type: 'date',
     name: 'dataFinal',
-    message: 'Fecha finalizacion',
-    default: new Date()    
+    message: 'Fecha finalizacion',  
   },
 ]
 
-const inpuTarea = async () => {
-  const tarea = await inquirer.prompt(questions);
-  console.log(tarea);
+/****************************** */
+const inTarea = async() => {
+  const tarea = await inquirer.prompt(questionsInTask);
   await Tareas.creat(tarea);
+  whatNow();
 }
 
-const question = [
+/****************************** */
+const findTareas = async() => {
+  await Tareas.findAll();
+  whatNow();
+}
+
+const questionId = [
   {
     name: 'id',
     message: 'Ingrese Id tarea'
   }
 ]
-const idTarea = async () => {
-  const { id } = await inquirer.prompt(question);
-  console.log(id);
+
+/****************************** */
+const findTarea = async() => {
+  const { id } = await inquirer.prompt(questionId);
   await Tareas.findOne(id);
+  whatNow();
 }
 
-const question1 = [
+/****************************** */
+const questionUpdate = [
   {
     name: 'id',
     message: 'Ingrese Id tarea'
@@ -80,20 +115,24 @@ const question1 = [
     name: 'estado',
     message: 'Estado de la tarea?',
     choices: ['pendiente', 'ejecucion', 'finalizada'],
+    default: 'finalizada'
   },
 ]
 
-const idUpdate = async () => {
-  const tarea  = await inquirer.prompt(question1);
+/****************************** */
+const updateTarea = async() => {
+  const tarea  = await inquirer.prompt(questionUpdate);
   await Tareas.upDat(tarea);
+  whatNow();
 }
 
-const idDelete = async () => {
-  const { id } = await inquirer.prompt(question);
-  console.log(id);
+/****************************** */
+const deleteTarea = async() => {
+  const { id } = await inquirer.prompt(questionId);
   await Tareas.delet(id);
+  whatNow();
 }
 
 module.exports = mysqlMenu
-// mysqlMenu();
+
 
