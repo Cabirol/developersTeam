@@ -1,37 +1,41 @@
+const {
+    obrirMongo,
+    tancarMongo,
+    novaTascaMongo,
+    tasquesMongo,
+    tascaMongo,
+    esborrarTascaMongo,
+    actualitzarEstatMongo
+} = require('./controllersMongoDB');
+ 
 const inquirer = require('inquirer');
-const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/devteamadv');
+async function initMongo(){
 
-const taskSchema = new mongoose.Schema({
-    nom: String,
-    usuari: String,
-    estat: String,
-    dataInici: String, //format data!!!
-    dataFinal: String  
-});
-
-const Task = mongoose.model('Task', taskSchema);
-
-const choicesMongo = {
-    "Crear una nova tasca": ()=> crearNovaTasca(),
-    "Llistar totes les tasques": ()=> mostrarTasques(),
-    "Llistar una tasca": ()=> llistarTasca(),
-    "Actualitzar l'estat d'una tasca": ()=> actualitzarTasca(),
-    "Esborrar una tasca": async ()=> esborrarTasca()
-    //"Tornar al menú principal": ()=>menuInit()
+    await obrirMongo();
+    mongoMenu();
 }
 
-function mongoMenu() {
+async function mongoMenu() {
+
+    let choicesMongo = {
+        "Crear una nova tasca": ()=> crearNovaTasca(),
+        "Llistar totes les tasques": ()=> mostrarTasques(),
+        "Llistar una tasca": ()=> llistarTasca(),
+        "Actualitzar l'estat d'una tasca": ()=> actualitzarTasca(),
+        "Esborrar una tasca": ()=> esborrarTasca(),
+        "Tornar al menú principal": ()=>tancarMongo().then(require('../developerAlvaro/developerAlvaro'))
+    }
+
     inquirer.prompt({
         type: 'list',
         name: 'answer',
         message: `\nEscull una opció:\n\n`,
         choices: Object.keys(choicesMongo)
     })
-        .then(({answer}) => {
-            choicesMongo[answer]();
-        });
+    .then(({answer}) => {
+        choicesMongo[answer]();
+    });
 }
 
 async function crearNovaTasca() {
@@ -50,7 +54,7 @@ async function crearNovaTasca() {
         {
             type: 'input',
             name: 'dataInici',
-            message: `\nEscriu la data d'inici de la tasca\n` //Dates per defecte
+            message: `\nEscriu la data d'inici de la tasca\n` //Actualitzar el format de les dates
           },
           {
             type: 'input',
@@ -59,32 +63,21 @@ async function crearNovaTasca() {
           }
     ];
 
-    inquirer.prompt(preguntesNovaTasca).then(answers => {
-        let novaTasca = new Task({
-            nom: answers.nomNovaTasca,
-            usuari: answers.nomUsuari,
-            estat: 'pendent',
-            dataInici: answers.dataInici,
-            dataFinal: answers.dataFinal
-        });
-        console.log('\nCreada una nova Tasca:');
-        console.log(novaTasca);
-        novaTasca.save();
-        whatNow();
-    });
+    inquirer.prompt(preguntesNovaTasca)
+    .then(answers => novaTascaMongo(answers.nomUsuari, answers.nomNovaTasca, answers.dataInici, answers.dataFinal))
+    .then(tasca => console.log("Creada nova tasca:\n", tasca))
+    .then(whatNow);
 }
 
 async function mostrarTasques() {
 
-    let tasques = await Task.find();
-    tasques = tasques.map(x => x.toObject());
-    console.table(tasques);
+    console.table(await tasquesMongo());
     whatNow();
 }
 
 async function llistarTasca() {
 
-    let nomTasques = await Task.find();
+    let nomTasques = await tasquesMongo();
     nomTasques = nomTasques.map(x => x.nom);
     if (nomTasques.lenght == 0){
         console.log('No hi ha tasques');
@@ -97,14 +90,14 @@ async function llistarTasca() {
         message: 'Quina tasca vols veure amb detall?',
         choices: nomTasques
     })
-    .then(answer => Task.findOne({nom:answer.escullTasca},{_id:0, __v:0}))
+    .then(answer => tascaMongo(answer.escullTasca))
     .then(tasca => console.log(tasca))
     .then(() => whatNow());
 }
 
 async function esborrarTasca() {
     
-    let nomTasques = await Task.find();
+    let nomTasques = await tasquesMongo();
     nomTasques = nomTasques.map(x => x.nom);
     if (nomTasques.lenght == 0){
         return console.log('No hi ha tasques');
@@ -126,22 +119,20 @@ async function esborrarTasca() {
     ];
 
     inquirer.prompt(preguntesEsborrar)
-    .then(answers => {
+    .then(async (answers) => {
         if(!answers.segur) {
             console.log("No s'ha esborrat la tasca.");
             return whatNow();
         }
-        Task.findOneAndDelete({nom:answers.llistaTasca}, function(err, tasca){
-            if (err) console.log(err);
-            else console.log("Tasca esborrada: \n", tasca);
-            whatNow();
-        });
+        let tascaEsborrada = await esborrarTascaMongo(answers.llistaTasca);
+        console.log("Tasca esborrada:", tascaEsborrada);
+        whatNow();
     });
 }
 
 async function actualitzarTasca() {
 
-    let nomTasques = await Task.find();
+    let nomTasques = await tasquesMongo();
     nomTasques = nomTasques.map(x => x.nom);
     if (nomTasques.lenght == 0){
         console.log('No hi ha tasques');
@@ -162,30 +153,32 @@ async function actualitzarTasca() {
             choices: ['pendent', 'en execució', 'acabat']
         }
     ];
+
     inquirer.prompt(preguntesActualitzar)
-    .then(answer => Task.findOneAndUpdate({nom:answer.llistaTasca}, {estat:answer.estat}))
+    .then(answer => actualitzarEstatMongo(answer.llistaTasca, answer.estat))
     .then(tasca => console.log(`Document abans de actualitzar:\n`, tasca))//Document actualitzat???
     .then(() => whatNow());
 }
 
 async function whatNow() {
+
     inquirer.prompt(
         {
             type: 'list',
-            name: 'response',
+            name: 'araque',
             message: `\nQuè vols fer ara?\n`,
             choices: ['Tornar al menú', 'Sortir']
         }
-    ).then(({ response }) => {
+    ).then( async (answer) => {
         console.log();
-        if ((response) === 'Tornar al menú') {
+        if (answer.araque === 'Tornar al menú') {
             mongoMenu();
         }
-        if ((response) === 'Sortir') {
-            mongoose.disconnect('mongodb://localhost:27017/devteamadv');
+        if (answer.araque === 'Sortir') {
+            await tancarMongo();
             console.log('Adéu!');
         }
     });
 }
 
-mongoMenu();
+module.exports = initMongo

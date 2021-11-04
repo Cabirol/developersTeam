@@ -8,10 +8,10 @@ const {
   updateTaskState,
   deleteTask
 } = require('./controllersJson')
-
+const initMongo = require('../developerDani/appMongo')
 
 const choicesDB = {
-  "mongoDB": ()=> console.log('mongodb'),
+  "mongoDB": ()=> initMongo(),
   "mysql" : ()=> console.log('mysql'),
   "json" : ()=> jsonMenu()
 }
@@ -151,3 +151,5 @@ inquirer.prompt({
 }
 
 menuInit()
+
+module.exports = menuInit
