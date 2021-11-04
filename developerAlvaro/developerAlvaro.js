@@ -8,7 +8,7 @@ const {
   updateTaskState,
   deleteTask
 } = require('./controllersJson')
-const {initMongo} = require('../developerDani/appMongo')
+const initMongo = require('../developerDani/appMongo')
 
 const choicesDB = {
   "mongoDB": ()=> initMongo(),

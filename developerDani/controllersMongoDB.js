@@ -1,17 +1,8 @@
 const mongoose = require('mongoose');
+const Task = require('./modelMongoDB');
 
-mongoose.connection.on('connected', ()=>console.log('\nConnectat a MongoDB\n')); ///Com se fa???
+mongoose.connection.on('connected', ()=>console.log('Connectat a MongoDB'));
 mongoose.connection.on('close', ()=>console.log('Desconnectat de MongoDB'));
-
-const taskSchema = new mongoose.Schema({
-    usuari: String,
-    nom: String,
-    estat: String,
-    dataInici: String, //format data!!!
-    dataFinal: String  
-});
-
-const Task = mongoose.model('Task', taskSchema);
 
 async function obrirMongo(){
     
@@ -65,4 +56,4 @@ module.exports = {
     tascaMongo,
     esborrarTascaMongo,
     actualitzarEstatMongo
-  }
+}

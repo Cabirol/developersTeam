@@ -7,7 +7,6 @@ const {
     esborrarTascaMongo,
     actualitzarEstatMongo
 } = require('./controllersMongoDB');
-// const menuInit = require('../developerAlvaro/developerAlvaro');
  
 const inquirer = require('inquirer');
 
@@ -24,12 +23,8 @@ async function mongoMenu() {
         "Llistar totes les tasques": ()=> mostrarTasques(),
         "Llistar una tasca": ()=> llistarTasca(),
         "Actualitzar l'estat d'una tasca": ()=> actualitzarTasca(),
-        "Esborrar una tasca": async ()=> esborrarTasca(),
-        "Tornar al menú principal": async () =>
-        {
-            await tancarMongo();
-            return require('../developerAlvaro/developerAlvaro');
-        }
+        "Esborrar una tasca": ()=> esborrarTasca(),
+        "Tornar al menú principal": ()=>tancarMongo().then(require('../developerAlvaro/developerAlvaro'))
     }
 
     inquirer.prompt({
@@ -59,7 +54,7 @@ async function crearNovaTasca() {
         {
             type: 'input',
             name: 'dataInici',
-            message: `\nEscriu la data d'inici de la tasca\n` //Dates per defecte
+            message: `\nEscriu la data d'inici de la tasca\n` //Actualitzar el format de les dates
           },
           {
             type: 'input',
@@ -166,6 +161,7 @@ async function actualitzarTasca() {
 }
 
 async function whatNow() {
+
     inquirer.prompt(
         {
             type: 'list',
@@ -184,4 +180,5 @@ async function whatNow() {
         }
     });
 }
-module.exports = {initMongo}
+
+module.exports = initMongo
