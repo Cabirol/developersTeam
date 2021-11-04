@@ -6,7 +6,7 @@ const Tarea = require('./tarea');
 /****************************** */
 async function creat(tarea){
     try{
-        console.log('Crear tarea...', tarea);
+        console.log('Crear tarea...');
         await Tarea.create(tarea);
         console.log('Tarea creada'); 
         //sequelize.close();
