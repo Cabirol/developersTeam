@@ -1,20 +1,15 @@
+const {
+    obrirMongo,
+    tancarMongo,
+    novaTascaMongo,
+    tasquesMongo,
+    tascaMongo,
+    esborrarTascaMongo,
+    actualitzarEstatMongo
+} = require('./controllersMongoDB');
+
 const inquirer = require('inquirer');
-const mongoose = require('mongoose');
 
-mongoose.connection.on('open', ()=>console.log('Connectat a MongoDB'));
-mongoose.connection.on('close', ()=>console.log('Desconnectat de MongoDB'));
-
-mongoose.connect('mongodb://localhost:27017/devteamadv');
-
-const taskSchema = new mongoose.Schema({
-    nom: String,
-    usuari: String,
-    estat: String,
-    dataInici: String, //format data!!!
-    dataFinal: String  
-});
-
-const Task = mongoose.model('Task', taskSchema);
 
 
 const choicesMongo = {
@@ -63,21 +58,12 @@ async function crearNovaTasca() {
           }
     ];
 
-    inquirer.prompt(preguntesNovaTasca).then(answers => {
-        let novaTasca = new Task({
-            nom: answers.nomNovaTasca,
-            usuari: answers.nomUsuari,
-            estat: 'pendent',
-            dataInici: answers.dataInici,
-            dataFinal: answers.dataFinal
-        });
-        console.log('\nCreada una nova Tasca:');
-        console.log(novaTasca);
-        novaTasca.save();
-        whatNow();
-    });
+    inquirer.prompt(preguntesNovaTasca)
+    .then(answers => novaTascaMongo(answers.nomUsuari, answers.nomNovaTasca, answers.dataInici, answers.dataFinal))
+    .then(tasca => console.log("Creada nova tasca:\n", tasca))
+    .then(whatNow);
 }
-
+//actualitzat fins aquí
 async function mostrarTasques() {
 
     let tasques = await Task.find();
@@ -191,5 +177,5 @@ async function whatNow() {
         }
     });
 }
-
+obrirMongo();
 mongoMenu();
