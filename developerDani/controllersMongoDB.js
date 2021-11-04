@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connection.on('connected', ()=>console.log('\nConnectat a MongoDB\n')); //Com se fa???
+mongoose.connection.on('connected', ()=>console.log('\nConnectat a MongoDB\n')); ///Com se fa???
 mongoose.connection.on('close', ()=>console.log('Desconnectat de MongoDB'));
 
 const taskSchema = new mongoose.Schema({

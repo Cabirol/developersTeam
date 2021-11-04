@@ -7,30 +7,40 @@ const {
     esborrarTascaMongo,
     actualitzarEstatMongo
 } = require('./controllersMongoDB');
-
+// const menuInit = require('../developerAlvaro/developerAlvaro');
+ 
 const inquirer = require('inquirer');
 
+async function initMongo(){
 
-
-const choicesMongo = {
-    "Crear una nova tasca": ()=> crearNovaTasca(),
-    "Llistar totes les tasques": ()=> mostrarTasques(),
-    "Llistar una tasca": ()=> llistarTasca(),
-    "Actualitzar l'estat d'una tasca": ()=> actualitzarTasca(),
-    "Esborrar una tasca": async ()=> esborrarTasca()
-    //"Tornar al menú principal": ()=>menuInit()
+    await obrirMongo();
+    mongoMenu();
 }
 
-function mongoMenu() {
+async function mongoMenu() {
+
+    let choicesMongo = {
+        "Crear una nova tasca": ()=> crearNovaTasca(),
+        "Llistar totes les tasques": ()=> mostrarTasques(),
+        "Llistar una tasca": ()=> llistarTasca(),
+        "Actualitzar l'estat d'una tasca": ()=> actualitzarTasca(),
+        "Esborrar una tasca": async ()=> esborrarTasca(),
+        "Tornar al menú principal": async () =>
+        {
+            await tancarMongo();
+            return require('../developerAlvaro/developerAlvaro');
+        }
+    }
+
     inquirer.prompt({
         type: 'list',
         name: 'answer',
         message: `\nEscull una opció:\n\n`,
         choices: Object.keys(choicesMongo)
     })
-        .then(({answer}) => {
-            choicesMongo[answer]();
-        });
+    .then(({answer}) => {
+        choicesMongo[answer]();
+    });
 }
 
 async function crearNovaTasca() {
@@ -63,20 +73,16 @@ async function crearNovaTasca() {
     .then(tasca => console.log("Creada nova tasca:\n", tasca))
     .then(whatNow);
 }
-//actualitzat fins aquí
+
 async function mostrarTasques() {
 
-    let tasques = await Task.find();
-    tasques = tasques.map(x => x.toObject());
-    console.log(tasques);
-    let noms = tasques.map(x => x.nom);
-    console.log(noms);
+    console.table(await tasquesMongo());
     whatNow();
 }
 
 async function llistarTasca() {
 
-    let nomTasques = await Task.find();
+    let nomTasques = await tasquesMongo();
     nomTasques = nomTasques.map(x => x.nom);
     if (nomTasques.lenght == 0){
         console.log('No hi ha tasques');
@@ -89,14 +95,14 @@ async function llistarTasca() {
         message: 'Quina tasca vols veure amb detall?',
         choices: nomTasques
     })
-    .then(answer => Task.findOne({nom:answer.escullTasca},{_id:0, __v:0}))
+    .then(answer => tascaMongo(answer.escullTasca))
     .then(tasca => console.log(tasca))
     .then(() => whatNow());
 }
 
 async function esborrarTasca() {
     
-    let nomTasques = await Task.find();
+    let nomTasques = await tasquesMongo();
     nomTasques = nomTasques.map(x => x.nom);
     if (nomTasques.lenght == 0){
         return console.log('No hi ha tasques');
@@ -118,12 +124,12 @@ async function esborrarTasca() {
     ];
 
     inquirer.prompt(preguntesEsborrar)
-    .then(answers => {
+    .then(async (answers) => {
         if(!answers.segur) {
             console.log("No s'ha esborrat la tasca.");
             return whatNow();
         }
-        let tascaEsborrada = Task.findOneAndDelete({nom:answers.llistaTasca});
+        let tascaEsborrada = await esborrarTascaMongo(answers.llistaTasca);
         console.log("Tasca esborrada:", tascaEsborrada);
         whatNow();
     });
@@ -131,7 +137,7 @@ async function esborrarTasca() {
 
 async function actualitzarTasca() {
 
-    let nomTasques = await Task.find();
+    let nomTasques = await tasquesMongo();
     nomTasques = nomTasques.map(x => x.nom);
     if (nomTasques.lenght == 0){
         console.log('No hi ha tasques');
@@ -152,8 +158,9 @@ async function actualitzarTasca() {
             choices: ['pendent', 'en execució', 'acabat']
         }
     ];
+
     inquirer.prompt(preguntesActualitzar)
-    .then(answer => Task.findOneAndUpdate({nom:answer.llistaTasca}, {estat:answer.estat}))
+    .then(answer => actualitzarEstatMongo(answer.llistaTasca, answer.estat))
     .then(tasca => console.log(`Document abans de actualitzar:\n`, tasca))//Document actualitzat???
     .then(() => whatNow());
 }
@@ -162,20 +169,19 @@ async function whatNow() {
     inquirer.prompt(
         {
             type: 'list',
-            name: 'response',
+            name: 'araque',
             message: `\nQuè vols fer ara?\n`,
             choices: ['Tornar al menú', 'Sortir']
         }
-    ).then(({ response }) => {
+    ).then( async (answer) => {
         console.log();
-        if ((response) === 'Tornar al menú') {
+        if (answer.araque === 'Tornar al menú') {
             mongoMenu();
         }
-        if ((response) === 'Sortir') {
-            mongoose.disconnect('mongodb://localhost:27017/devteamadv');
+        if (answer.araque === 'Sortir') {
+            await tancarMongo();
             console.log('Adéu!');
         }
     });
 }
-obrirMongo();
-mongoMenu();
+module.exports = {initMongo}
