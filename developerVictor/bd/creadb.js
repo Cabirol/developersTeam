@@ -16,8 +16,7 @@ async function creadb(){
         .then(console.log('\n Bd sincronizada'))
         .catch(function(err){ console.log(err)})       
     })  
-    conexion.end();       
-    
+    conexion.end();          
 }
 
 creadb();

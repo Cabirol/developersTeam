@@ -10,7 +10,8 @@ const choicesJson = {
   "listar una tarea": () => findTarea(),
   "actualizar una tarea": () => updateTarea(),
   "eliminar una tarea": () => deleteTarea(),
-  "volver al menu principal": () => whatNow()
+  "volver al menu principal": () => whatNow(),
+  "salir": () => sequelize.close()
 }
 
 /****************************** */
@@ -77,34 +78,6 @@ const questionsInTask = [
   },
 ]
 
-/****************************** */
-const inTarea = async() => {
-  const tarea = await inquirer.prompt(questionsInTask);
-  await Tareas.creat(tarea);
-  whatNow();
-}
-
-/****************************** */
-const findTareas = async() => {
-  await Tareas.findAll();
-  whatNow();
-}
-
-const questionId = [
-  {
-    name: 'id',
-    message: 'Ingrese Id tarea'
-  }
-]
-
-/****************************** */
-const findTarea = async() => {
-  const { id } = await inquirer.prompt(questionId);
-  await Tareas.findOne(id);
-  whatNow();
-}
-
-/****************************** */
 const questionUpdate = [
   {
     name: 'id',
@@ -118,6 +91,33 @@ const questionUpdate = [
     default: 'finalizada'
   },
 ]
+
+const questionId = [
+  {
+    name: 'id',
+    message: 'Ingrese Id tarea'
+  }
+]
+
+/****************************** */
+const inTarea = async() => {
+  const tarea = await inquirer.prompt(questionsInTask);
+  await Tareas.creat(tarea);
+  whatNow();
+}
+
+/****************************** */
+const findTareas = async() => {
+  await Tareas.findAll();
+  whatNow();
+}
+
+/****************************** */
+const findTarea = async() => {
+  const { id } = await inquirer.prompt(questionId);
+  await Tareas.findOne(id);
+  whatNow();
+}
 
 /****************************** */
 const updateTarea = async() => {
