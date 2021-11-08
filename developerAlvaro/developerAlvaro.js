@@ -1,4 +1,4 @@
-const initDB = require('./initDB')
+const mainMySQL = require('../developerVictor/app')
 
 const inquirer = require('inquirer')
 const {
@@ -12,7 +12,7 @@ const initMongo = require('../developerDani/appMongo')
 
 const choicesDB = {
   "mongoDB": ()=> initMongo(),
-  "mysql" : ()=> console.log('mysql'),
+  "mysql" : ()=> mainMySQL(),
   "json" : ()=> jsonMenu()
 }
 const choicesJson={
