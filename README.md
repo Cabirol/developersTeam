@@ -1,5 +1,5 @@
 # developersTeam
 
-la configuracion de MySQL esta en: developersVictor / config.json
+la configuracion de MySQL esta en: developerVictor / config.json
 
-comando para que funcione: npm run start
+comando para iniciar: npm run start
