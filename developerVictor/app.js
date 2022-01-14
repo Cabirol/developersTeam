@@ -1,9 +1,10 @@
 const menuMysql = require('./menumysql');
 
-const creaBd = require('./bd/creadb')
+const creaBd = require('./bd/creanewdb')
 
 async function mainMySQL(){
-    await creaBd;
+
+    await creaBd();
     //console.clear();
     menuMysql();
 

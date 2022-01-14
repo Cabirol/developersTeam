@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const {sequelize} = require('./bd/creadb');
+const sequelize = require('./bd/creadb');
 
 const Tareas = require('./models/crud');
 inquirer.registerPrompt("date", require("inquirer-date-prompt"));
